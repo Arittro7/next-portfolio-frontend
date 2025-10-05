@@ -1,3 +1,4 @@
+import Navbar from '@/components/share/Navbar';
 import React from 'react';
 
 export default function PublicLayout({
@@ -7,7 +8,7 @@ export default function PublicLayout({
 }>) {
   return (
     <div className="max-w-[95%] lg:max-w-[90%] xl:max-w-[80%] mx-auto  my-5">
-      {/* navbar will add here */}
+      <Navbar/>
       <main className="min-h-dvh">
         {children}
       </main>
