@@ -9,7 +9,7 @@ export const metadata = {
 };
 
 export default async function Page() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/project`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/project`, {
     next: { tags: ["project"] },
     cache: "no-store",
   });
@@ -19,7 +19,9 @@ export default async function Page() {
 
   return (
     <div>
-      <h2 className="text-2xl md:text-4xl font-bold text-center w-full mb-5">My Projects 💻</h2>
+      <h2 className="text-2xl md:text-4xl font-bold text-center w-full mb-5">
+        My Projects 💻
+      </h2>
 
       <div className="flex items-center justify-center mt-5 mb-10 w-full">
         <ProjectForm />

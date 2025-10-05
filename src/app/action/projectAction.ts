@@ -6,7 +6,7 @@ import { revalidateTag } from "next/cache";
 // Create Project
 export async function createProject(payload: Project) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/project`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/project`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30,13 +30,16 @@ export async function createProject(payload: Project) {
 // Update Project
 export async function updateProject(id: number, payload: Partial<Project>) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/project/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/project/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
 
     if (res.ok) {
       revalidateTag("project");
@@ -54,9 +57,12 @@ export async function updateProject(id: number, payload: Partial<Project>) {
 // Delete Project
 export async function deleteProject(id: number) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/project/${id}`, {
-      method: "DELETE",
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/project/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
 
     if (res.ok) {
       revalidateTag("project");

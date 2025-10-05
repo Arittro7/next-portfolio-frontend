@@ -13,7 +13,7 @@ export async function createBlogAction(formData: {
   authorId?: number;
 }) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/blog`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/blog`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -36,13 +36,16 @@ export async function createBlogAction(formData: {
 // Update Blog
 export async function updateBlogAction(id: number, formData: any) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/blog/${id}`, {
-      method: "PATCH", 
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/blog/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
 
     if (!res.ok) throw new Error("Failed to update blog");
 
@@ -57,9 +60,12 @@ export async function updateBlogAction(id: number, formData: any) {
 // Delete Blog
 export async function deleteBlog(id: number) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/blog/${id}`, {
-      method: "DELETE",
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/blog/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
 
     if (!res.ok) throw new Error("Failed to delete blog");
 

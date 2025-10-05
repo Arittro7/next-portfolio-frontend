@@ -4,13 +4,13 @@ import BlogCard from "../share/BlogCard";
 import { Blog } from "@/types";
 
 async function Blogs() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/blog`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/blog`, {
     next: { tags: ["blog"] },
     cache: "no-store",
   });
 
   const json = await res.json();
-  const blogs: Blog[] = json.data || []; 
+  const blogs: Blog[] = json.data || [];
 
   return (
     <section className="max-w-7xl mx-auto md:px-6 py-16 text-center md:text-left flex flex-col items-start">
@@ -20,9 +20,9 @@ async function Blogs() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 pt-5">
         {blogs.length > 0 ? (
-          blogs.slice(0, 3).map((blog) => (
-            <BlogCard key={blog.id} blog={blog} />
-          ))
+          blogs
+            .slice(0, 3)
+            .map((blog) => <BlogCard key={blog.id} blog={blog} />)
         ) : (
           <p className="text-gray-400">No blogs found.</p>
         )}

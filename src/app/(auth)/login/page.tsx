@@ -1,86 +1,88 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
+import { useRouter, useSearchParams } from "next/navigation";
+
+const schema = z.object({
+  email: z.string().email("Input Valid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+type FormValues = z.infer<typeof schema>;
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirectTo") || "/dashboard";
 
-  async function handleLogin(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
+  const onSubmit = async (values: FormValues) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(values),
+          credentials: "include",
+        }
+      );
 
-      const data = await res.json();
-
-      if (res.ok && data?.data?.accessToken) {
-        // token in localStorage
-        localStorage.setItem("accessToken", data.data.accessToken);
-
-        toast.success("Login successful!");
-        router.push("/dashboard"); 
-      } else {
-        toast.error(data.message || "Login failed");
+      if (!res.ok) {
+        const err = await res.json().catch(() => null);
+        toast.error(err?.message || "Login failed");
+        return;
       }
-    } catch (err) {
-      console.error("Error logging in:", err);
-      toast.error("Something went wrong");
-    } finally {
-      setLoading(false);
+
+      toast.success("Logged in successfully");
+      router.push(redirectTo);
+      router.refresh();
+    } catch (error) {
+      toast.error("Network error");
     }
-  }
+  };
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <div className="w-full max-w-md rounded-2xl p-8 shadow-lg border border-gray-500">
-        <h2 className="mb-6 text-center text-2xl font-bold">Login to Your Account</h2>
+    <section className="max-w-md mx-auto py-16 px-4">
+      <h1 className="text-2xl font-bold text-center mb-6">Owner Login</h1>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="shadow-md rounded-2xl p-6 flex flex-col gap-4"
+      >
+        <input
+          type="email"
+          placeholder="Email"
+          {...register("email")}
+          className="border p-2 rounded"
+        />
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              required
-              className="mt-1 w-full rounded-lg border border-gray-500 p-2 focus:border-indigo-500 focus:ring focus:ring-indigo-500"
-            />
-          </div>
+        {errors.email && <p className="text-red-500">{errors.email.message}</p>}
 
-          <div>
-            <label className="block text-sm font-medium">Password</label>
-            <input
-              type="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              required
-              className="mt-1 w-full rounded-lg border border-gray-500 p-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200"
-            />
-          </div>
+        <input
+          type="password"
+          placeholder="Password"
+          {...register("password")}
+          className="border p-2 rounded"
+        />
+        {errors.password && (
+          <p className="text-red-500">{errors.password.message}</p>
+        )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-lg bg-indigo-600 py-2 font-semibold text-white hover:bg-indigo-700 cursor-pointer disabled:opacity-60"
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
-      </div>
-    </div>
+        <button
+          disabled={isSubmitting}
+          className="bg-indigo-600 text-white py-2 rounded"
+        >
+          {isSubmitting ? "Logging in..." : "Login"}
+        </button>
+      </form>
+    </section>
   );
 }

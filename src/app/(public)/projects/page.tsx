@@ -1,4 +1,3 @@
-
 import ProjectCard from "@/components/share/ProjectCard";
 import { Project } from "@/types";
 import { Metadata } from "next";
@@ -10,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 async function ProjectPage() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/project`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/project`, {
     next: { tags: ["project"] },
     cache: "no-store",
   });
@@ -20,7 +19,9 @@ async function ProjectPage() {
 
   return (
     <div>
-      <h1 className="flex items-center justify-center py-10 text-3xl font-bold">My Projects</h1>
+      <h1 className="flex items-center justify-center py-10 text-3xl font-bold">
+        My Projects
+      </h1>
       <div className="flex flex-wrap items-start gap-8 pb-5">
         {projects.map((project) => (
           <ProjectCard

@@ -1,4 +1,3 @@
-
 import BlogCard from "@/components/share/BlogCard";
 import { Blog } from "@/types";
 import React from "react";
@@ -9,13 +8,13 @@ export const metadata = {
 };
 
 async function Page() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/blog`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/blog`, {
     next: { tags: ["blog"] },
     cache: "no-store",
   });
 
   const json = await res.json();
-  const blogs: Blog[] = json.data || []; 
+  const blogs: Blog[] = json.data || [];
 
   return (
     <div>

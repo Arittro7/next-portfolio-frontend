@@ -2,12 +2,9 @@ import React from "react";
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const { id } = params;
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/blog/${id}`,
-    {
-      cache: "no-store",
-    }
-  );
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/blog/${id}`, {
+    cache: "no-store",
+  });
   const json = await res.json();
   const blog = json?.data;
 
@@ -37,12 +34,9 @@ export default async function BlogDetails({
   params: { id: string };
 }) {
   const { id } = params;
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/blog/${id}`,
-    {
-      next: { revalidate: 10 },
-    }
-  );
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/blog/${id}`, {
+    next: { revalidate: 10 },
+  });
   const json = await res.json();
   const blog = json?.data;
 

@@ -4,7 +4,7 @@ import { Project } from "@/types";
 import ProjectCard from "../share/ProjectCard";
 
 async function Projects() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/project`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/project`, {
     next: { tags: ["project"] },
     cache: "no-store",
   });
