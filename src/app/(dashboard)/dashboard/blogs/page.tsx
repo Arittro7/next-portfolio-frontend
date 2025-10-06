@@ -9,7 +9,7 @@ export const metadata = {
 };
 
 async function page() {
-  const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/blog/all`, {
+  const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/blog`, {
     next: { tags: ["blog"] },
   }).then((res) => res.json());
   return (

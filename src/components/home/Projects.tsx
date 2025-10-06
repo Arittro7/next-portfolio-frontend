@@ -10,7 +10,7 @@ async function Projects() {
   });
 
   const json = await res.json();
-  const projects: Project[] = json.data || []; // ✅ data থেকে projects নাও
+  const projects: Project[] = json.data || [];
 
   return (
     <section

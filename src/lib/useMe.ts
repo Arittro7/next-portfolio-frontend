@@ -6,7 +6,7 @@ export interface Me {
   id: string;
   name: string;
   email: string;
-  role: "admin" | "user";
+  role: "ADMIN" | "USER";
 }
 
 export default function useMe() {
@@ -16,10 +16,13 @@ export default function useMe() {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/me`, {
-          credentials: "include",
-          cache: "no-store",
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/me`,
+          {
+            credentials: "include", 
+            cache: "no-store",
+          }
+        );
 
         if (!res.ok) {
           setUser(null);
